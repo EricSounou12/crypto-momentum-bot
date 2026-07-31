@@ -26,5 +26,32 @@ public class Backtester{
     this.equityCurve = new ArrayList<>();
     this.strategy = strategy;
        
-}   
-}
+}  
+/*
+public void run method job is run the simualtion and update feilds
+
+
+*/
+public void run() {
+    for (int i = 0; i < candles.size(); i++) {
+
+        double portfolioValue;
+        if(isLong){
+            portfolioValue = btcHeld * candles.get(i).close();
+        } else {
+            portfolioValue = cash;
+
+        }
+        equityCurve.add(portfolioValue);
+        /*check if this sis rebalnce day */
+         if ((i + 1) % 5 == 0) {
+
+            Signal todaySignal = strategy.signalAt(candles, i);
+        
+    }
+
+
+    }
+
+
+}}
