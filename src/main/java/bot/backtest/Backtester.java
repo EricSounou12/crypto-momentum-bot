@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.ArrayList;
  
 public class Backtester{
+   private double entryPrice;
+   private long entryTimestamp;
    private final List<Candle> candles;
    private double cash;
    private double btcHeld;
@@ -15,6 +17,7 @@ public class Backtester{
    private List<Trade> trades;
    private List<Double> equityCurve;
    private final MomentumStrategy strategy;
+   
 
    public Backtester(List<Candle> candles, double startingCash, MomentumStrategy strategy) {
     this.candles = candles;
@@ -25,6 +28,11 @@ public class Backtester{
     this.trades = new ArrayList<>();
     this.equityCurve = new ArrayList<>();
     this.strategy = strategy;
+    this.btcHeld = btcAmount * 0.999;
+    this.cash = 0;
+    this.isLong = true;
+    this.entryPrice = entryPrice;
+    this.entryTimestamp = entryTimestamp;
        
 }  
 /*
@@ -43,10 +51,15 @@ public void run() {
 
         }
         equityCurve.add(portfolioValue);
-        /*check if this sis rebalnce day */
+        /*check if this is rebalnce day */
          if ((i + 1) % 5 == 0) {
 
             Signal todaySignal = strategy.signalAt(candles, i);
+            //buys btc if conditons are we arent in a postion that is long and the signal is long
+             if (!isLong && todaySignal == Signal.LONG) {
+                double buyPrice = candles.get(i).close();
+                double buyPrice = 
+    }
         
     }
 
