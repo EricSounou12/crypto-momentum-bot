@@ -28,11 +28,6 @@ public class Backtester{
     this.trades = new ArrayList<>();
     this.equityCurve = new ArrayList<>();
     this.strategy = strategy;
-    this.btcHeld = btcAmount * 0.999;
-    this.cash = 0;
-    this.isLong = true;
-    this.entryPrice = entryPrice;
-    this.entryTimestamp = entryTimestamp;
        
 }  
 /*
@@ -57,8 +52,15 @@ public void run() {
             Signal todaySignal = strategy.signalAt(candles, i);
             //buys btc if conditons are we arent in a postion that is long and the signal is long
              if (!isLong && todaySignal == Signal.LONG) {
-                double buyPrice = candles.get(i).close();
-                double buyPrice = 
+                double buyPrice = candles.get(i).close(); // buying price is the candles clsing
+                double btcAmount = cash / buyPrice; // btc is calc by dividing cash by btc value. this will be used to figure how muc btc is available to buy
+                
+                this.btcHeld = btcAmount * 0.999;
+                this.cash = 0;
+                this.isLong = true;
+                this.entryPrice = buyPrice;
+                this.entryTimestamp = candles.get(i).timestamp();
+              
     }
         
     }
