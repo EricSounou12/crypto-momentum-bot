@@ -5,7 +5,7 @@ import bot.strategy.MomentumStrategy;
 import bot.strategy.MomentumStrategy.Signal;
 import java.util.List;
 import java.util.ArrayList;
- 
+
 public class Backtester{
    private double entryPrice;
    private long entryTimestamp;
@@ -62,6 +62,20 @@ public void run() {
                 this.entryTimestamp = candles.get(i).timestamp();
               
     }
+
+            if (isLong && todaySignal == Signal.FLAT) {
+                double sellPrice = candles.get(i).close();
+                double cashFromSale = btcHeld * sellPrice;
+                double actualCash = cashFromSale * 0.999;
+
+                this.cash = actualCash;
+                this.btcHeld = 0;
+                this.isLong =  false; 
+
+
+          
+
+            }
         
     }
 
