@@ -63,18 +63,23 @@ public void run() {
               
     }
 
-            if (isLong && todaySignal == Signal.FLAT) {
+            if (isLong && todaySignal == Signal.FLAT) { // trade logic used to enter a trade if the signal is flat and we are already long we should then sell 
                 double sellPrice = candles.get(i).close();
                 double cashFromSale = btcHeld * sellPrice;
                 double actualCash = cashFromSale * 0.999;
 
                 this.cash = actualCash;
                 this.btcHeld = 0;
-                this.isLong =  false; 
-
+                this.isLong =  false;
+                
+                double pnlPercent = (sellPrice - entryPrice) / entryPrice;
+                long exitTimestamp = candles.get(i).timestamp();
+                Trade completedTrade = new Trade(entryTimestamp, entryPrice, exitTimestamp, sellPrice, pnlPercent);
+                trades.add(completedTrade);
+                
 
           
-
+            
             }
         
     }
