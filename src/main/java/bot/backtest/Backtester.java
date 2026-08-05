@@ -89,4 +89,10 @@ public class Backtester {
     public double getStartingCash() {
         return startingCash;
     }
+
+
+    public List<Double> getEquityCurve(){
+        return equityCurve;
+
+    }
 }
