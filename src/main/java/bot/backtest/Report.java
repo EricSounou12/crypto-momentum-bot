@@ -20,6 +20,22 @@ public class Report {
     
     }
 
+    public double winRate() {
+        List<Trade> trades = backtester.getTrades();
+        int wins = 0;
+
+
+        for (int i = 0; i < trades.size(); i++) {
+
+            Trade t = trades.get(i);
+        if (t.pnlPercent() > 0) {
+            wins++;
+        }
+    }
+
+    return (double) wins / trades.size();
+}
+
 
 
 }
