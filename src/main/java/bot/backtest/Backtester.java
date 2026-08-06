@@ -95,4 +95,8 @@ public class Backtester {
         return equityCurve;
 
     }
+
+    public List<Candle> getCandles(){
+        return candles;
+    }
 }

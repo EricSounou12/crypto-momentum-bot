@@ -37,5 +37,35 @@ public class Report {
 }
 
 
+public double maxDrawdown() {
+    List<Double> equityCurve = backtester.getEquityCurve();
+    double peak = equityCurve.get(0);
+    double worstDrawdown = 0;
+
+    for (int i = 0; i < equityCurve.size(); i++) {
+        double today = equityCurve.get(i);
+       
+
+        if(today > peak){
+            peak = today;
+        }
+           
+
+        double todaysDrawdown = (today-peak) / peak;
+        if(todaysDrawdown<worstDrawdown){
+                worstDrawdown = todaysDrawdown;
+            }
+
+        
+
+
+
+      
+    }
+
+    return worstDrawdown;
+}
+
 
 }
+

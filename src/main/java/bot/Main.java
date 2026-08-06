@@ -21,8 +21,10 @@ public class Main {
 
         // just returns the return rate of our strat
         Report report = new Report(backtester);
-
+        System.out.println("------------------------------------------");
         System.out.println("Total Return: " + report.totalReturn());
         System.out.println("Win Rate: " + report.winRate());
+        System.out.println("Max Drawdown: " + report.maxDrawdown());
+        System.out.println("------------------------------------------");
     }
 }
