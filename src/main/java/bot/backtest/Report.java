@@ -1,6 +1,8 @@
 package bot.backtest;
 
+
 import java.util.List;
+import bot.model.Candle;
 
 public class Report {
     private final Backtester backtester;
@@ -44,26 +46,26 @@ public double maxDrawdown() {
 
     for (int i = 0; i < equityCurve.size(); i++) {
         double today = equityCurve.get(i);
-       
-
         if(today > peak){
             peak = today;
         }
-           
-
         double todaysDrawdown = (today-peak) / peak;
         if(todaysDrawdown<worstDrawdown){
                 worstDrawdown = todaysDrawdown;
-            }
-
-        
-
-
-
-      
+            }     
     }
-
     return worstDrawdown;
+}
+
+public double buyAndHoldReturn() {
+    List<Candle> candles = backtester.getCandles();
+    double firstPrice = candles.get(0).close();
+    double lastPrice = candles.get(candles.size() - 1).close();
+
+    double btcAmount = backtester.getStartingCash() / firstPrice;
+    double  finalValue = btcAmount * lastPrice;
+
+    return (finalValue - backtester.getStartingCash()) / backtester.getStartingCash();
 }
 
 
