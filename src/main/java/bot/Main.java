@@ -6,6 +6,8 @@ import bot.strategy.MomentumStrategy;
 import bot.backtest.Backtester;
 import bot.backtest.Report;
 import java.util.List;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -25,6 +27,41 @@ public class Main {
         System.out.println("Total Return: " + report.totalReturn());
         System.out.println("Win Rate: " + report.winRate());
         System.out.println("Max Drawdown: " + report.maxDrawdown());
+        System.out.println("Buy & Hold Return: " + report.buyAndHoldReturn());
         System.out.println("------------------------------------------");
+
+        long splitTime = LocalDate.of(2024, 1, 1)
+                .atStartOfDay(ZoneOffset.UTC)
+                .toInstant()
+                .toEpochMilli();
+
+        int splitIndex = -1;
+        for (int i = 0; i < candles.size(); i++) {
+            if (candles.get(i).timestamp() >= splitTime) {
+                splitIndex = i;
+                break;
+            }
+        }
+
+        List<Candle> inSample = candles.subList(0, splitIndex);
+        List<Candle> outOfSample = candles.subList(splitIndex, candles.size());
+
+        Backtester inSampleBacktester = new Backtester(inSample, 100000, strategy);
+        inSampleBacktester.run();
+        Report inSampleReport = new Report(inSampleBacktester);
+
+        Backtester outOfSampleBacktester = new Backtester(outOfSample, 100000, strategy);
+        outOfSampleBacktester.run();
+        Report outOfSampleReport = new Report(outOfSampleBacktester);
+
+        System.out.println("=== IN-SAMPLE (2019-2023) ===");
+        System.out.println("Total Return: " + inSampleReport.totalReturn());
+        System.out.println("Buy & Hold Return: " + inSampleReport.buyAndHoldReturn());
+        System.out.println("Max Drawdown: " + inSampleReport.maxDrawdown());
+
+        System.out.println("=== OUT-OF-SAMPLE (2024-2026) ===");
+        System.out.println("Total Return: " + outOfSampleReport.totalReturn());
+        System.out.println("Buy & Hold Return: " + outOfSampleReport.buyAndHoldReturn());
+        System.out.println("Max Drawdown: " + outOfSampleReport.maxDrawdown());
     }
 }
