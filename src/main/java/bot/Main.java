@@ -5,15 +5,24 @@ import bot.model.Candle;
 import bot.strategy.MomentumStrategy;
 import bot.backtest.Backtester;
 import bot.backtest.Report;
+import bot.data.LivePriceFethcer;
+import bot.data.LiveCandleWindow;
 import java.util.List;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import bot.strategy.MomentumStrategy.Signal;
+
 
 public class Main {
     public static void main(String[] args) throws Exception {
         CandleLoader loader = new CandleLoader();
         List<Candle> candles = loader.loadCandles();
         System.out.println("Loaded " + candles.size() + " candles.");
+
+        LiveCandleWindow window = new LiveCandleWindow(40);
+        window.loadWithHistory(candles);
+
+LivePriceFethcer fetcher = new LivePriceFethcer();
 
         // we are looking about every 28 daays and rebalancing the portfolio every 28 days
         MomentumStrategy strategy = new MomentumStrategy(28);
@@ -63,5 +72,23 @@ public class Main {
         System.out.println("Total Return: " + outOfSampleReport.totalReturn());
         System.out.println("Buy & Hold Return: " + outOfSampleReport.buyAndHoldReturn());
         System.out.println("Max Drawdown: " + outOfSampleReport.maxDrawdown());
+
+        while(true){
+
+            Candle latest = fetcher.fetchLatCandle();
+            window.addCandle(latest);
+
+            List<Candle> currCandles = window.getCandles();
+            int latestIndex = currCandles.size() - 1;
+
+            Signal signal = strategy.signalAt(currCandles, latestIndex);
+            System.out.println("Latest signal: " + signal);
+
+            Thread.sleep(10000); 
+
+
+
+
+        }
     }
 }

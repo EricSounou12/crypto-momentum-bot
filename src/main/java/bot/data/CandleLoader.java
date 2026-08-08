@@ -108,7 +108,7 @@ public class CandleLoader {
      * We only care about the first 6 fields of each inner array:
      * open time, open, high, low, close, volume.
      */
-    private List<Candle> parseKlinesJson(String json) {
+    public List<Candle> parseKlinesJson(String json) {
         List<Candle> candles = new ArrayList<>();
 
         // strip the outer [ and ]
